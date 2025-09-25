@@ -36,7 +36,6 @@ const buttonConfigs = [
   { label: "Charge Current At High Limit", code: "04.00.80", description: "Fast Charge Current At High Limit" }
 ];
 
-
 export default function App() {
   const [log, setLog] = useState([]);
   const [expanded, setExpanded] = useState({});
@@ -73,23 +72,19 @@ export default function App() {
 
   const clearAllCodes = async () => {
     for (let btn of buttonConfigs) {
-      try {
-        const res = await fetch(`${BACKEND_URL}/clear_command`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ code: btn.code }),
-        });
-        const data = await res.json();
-        logMessage(res.ok ? `[CLEARED] ${data.cmd}` : `[ERROR] ${data.message}`);
-      } catch (err) {
-        logMessage(`[ERROR] ${err.message}`);
-      }
+      await clearCommand(btn.code);
     }
+  };
+
+  const getColor = (code) => {
+    if (code.startsWith("01")) return "red";
+    if (code.startsWith("02")) return "orange";
+    if (code.startsWith("03")) return "yellow";
+    return "#aaa";
   };
 
   return (
     <div style={{ display: "flex", height: "100vh", background: "#2b2b2b", color: "#fff" }}>
-      {/* Left panel */}
       <div style={{ flex: 1, padding: "20px", overflowY: "auto" }}>
         {buttonConfigs.map((btn, i) => (
           <div
@@ -106,16 +101,13 @@ export default function App() {
             onMouseEnter={e => e.currentTarget.style.background = "#3a3a3a"}
             onMouseLeave={e => e.currentTarget.style.background = "#333"}
           >
-            {/* Trigger button */}
             <button
               onClick={() => sendCommand(btn.code)}
               style={{ background: "#4CAF50", color: "#fff", border: "none", borderRadius: "5px", padding: "10px", cursor: "pointer", marginRight: "10px", display: "flex", alignItems: "center" }}
             >
-              <MdStart style={{ marginRight: "5px" }} />
-              Trigger
+              <MdStart style={{ marginRight: "5px" }} /> Trigger
             </button>
 
-            {/* Label + Dropdown */}
             <div style={{ flex: 1 }}>
               <div
                 style={{
@@ -137,7 +129,7 @@ export default function App() {
                   overflow: "hidden",
                   transition: "max-height 0.3s ease",
                   fontSize: "15px",
-                  color: "#aaa",
+                  color: getColor(btn.code),
                   lineHeight: "1.3",
                   marginTop: expanded[i] ? "5px" : "0px"
                 }}
@@ -146,18 +138,15 @@ export default function App() {
               </div>
             </div>
 
-            {/* Clear button */}
             <button
               onClick={() => clearCommand(btn.code)}
               style={{ background: "#bf3e3e", color: "#fff", border: "none", borderRadius: "5px", padding: "5px 10px", cursor: "pointer", marginLeft: "10px", display: "flex", alignItems: "center" }}
             >
-              <RiDeleteBack2Line />
-              Clear
+              <RiDeleteBack2Line /> Clear
             </button>
           </div>
         ))}
 
-        {/* Clear All */}
         <button
           onClick={clearAllCodes}
           style={{ marginTop: "10px", width: "100%", padding: "10px", background: "#bf3e3e", color: "#fff", border: "none", borderRadius: "5px", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "5px" }}
@@ -166,7 +155,6 @@ export default function App() {
         </button>
       </div>
 
-      {/* Right panel: Activity Log */}
       <ActivityLog log={log} setLog={setLog} />
     </div>
   );
