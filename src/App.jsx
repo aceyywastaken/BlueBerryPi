@@ -27,7 +27,7 @@ const buttonConfigs = [
   { label: "Low temperature when charging", code: "03.00.00.01.00", description: "Battery temperature close to low limits for charging" },
   { label: "Over Temperature(discharge)", code: "03.00.00.02.00", description: "Battery Temperature Close to High Limit during Discharge" },
   { label: "SBOV", code: "03.00.00.00.80", description: "Single battery voltage above 15.5V" },
-  { label: "Excessive_Overcharge_Error", code: "04.01.00.", description: "System 50% overcharge error" },
+  { label: "ADah", code: "04.01.00.", description: "System 50% overcharge error" },
   { label: "ADAh", code: "04.02.00.", description: "Charge completed below lower voltage threshold. System undercharged" },
   { label: "Low OCV", code: "04.00.08.", description: "Single battery low OCV. Confirm BMS voltage. Replace battery if confirmed" },
   { label: "SPU Communication Loss", code: "04.00.10", description: "SPU lost communication. Check CAN connections" },
@@ -77,11 +77,12 @@ export default function App() {
   };
 
   const getColor = (code) => {
-    if (code.startsWith("01")) return "red";
-    if (code.startsWith("02")) return "orange";
-    if (code.startsWith("03")) return "yellow";
-    return "#aaa";
+    if (code.startsWith("01")) return "#8B1A1A"; // dark red
+    if (code.startsWith("02")) return "#B85C1A"; // dark orange
+    if (code.startsWith("03")) return "#B8A41A"; // dark yellow
+    return "#444"; // default dark gray
   };
+  
 
   return (
     <div style={{ display: "flex", height: "100vh", background: "#2b2b2b", color: "#fff" }}>
@@ -94,16 +95,27 @@ export default function App() {
               alignItems: "center",
               marginBottom: "10px",
               padding: "10px",
-              background: "#333",
+              background: getColor(btn.code), 
               borderRadius: "8px",
-              transition: "background 0.2s"
+              transition: "background 0.2s",
+              color: "#fff"
             }}
-            onMouseEnter={e => e.currentTarget.style.background = "#3a3a3a"}
-            onMouseLeave={e => e.currentTarget.style.background = "#333"}
+            onMouseEnter={e => e.currentTarget.style.opacity = "0.9"}
+            onMouseLeave={e => e.currentTarget.style.opacity = "1"}
           >
             <button
               onClick={() => sendCommand(btn.code)}
-              style={{ background: "#4CAF50", color: "#fff", border: "none", borderRadius: "5px", padding: "10px", cursor: "pointer", marginRight: "10px", display: "flex", alignItems: "center" }}
+              style={{
+                background: "#4CAF50",
+                color: "#fff",
+                border: "none",
+                borderRadius: "5px",
+                padding: "10px",
+                cursor: "pointer",
+                marginRight: "10px",
+                display: "flex",
+                alignItems: "center"
+              }}
             >
               <MdStart style={{ marginRight: "5px" }} /> Trigger
             </button>
@@ -112,7 +124,6 @@ export default function App() {
               <div
                 style={{
                   cursor: "pointer",
-                  color: "#ccc",
                   fontSize: "16px",
                   display: "flex",
                   alignItems: "center",
@@ -129,18 +140,27 @@ export default function App() {
                   overflow: "hidden",
                   transition: "max-height 0.3s ease",
                   fontSize: "15px",
-                  color: getColor(btn.code),
                   lineHeight: "1.3",
                   marginTop: expanded[i] ? "5px" : "0px"
                 }}
               >
-                {btn.description} <span style={{ color: "#4CAF50" }}>({btn.code})</span>
+                {btn.description} <span style={{ color: "#000" }}>({btn.code})</span>
               </div>
             </div>
 
             <button
               onClick={() => clearCommand(btn.code)}
-              style={{ background: "#bf3e3e", color: "#fff", border: "none", borderRadius: "5px", padding: "5px 10px", cursor: "pointer", marginLeft: "10px", display: "flex", alignItems: "center" }}
+              style={{
+                background: "#bf3e3e",
+                color: "#fff",
+                border: "none",
+                borderRadius: "5px",
+                padding: "5px 10px",
+                cursor: "pointer",
+                marginLeft: "10px",
+                display: "flex",
+                alignItems: "center"
+              }}
             >
               <RiDeleteBack2Line /> Clear
             </button>
@@ -149,7 +169,20 @@ export default function App() {
 
         <button
           onClick={clearAllCodes}
-          style={{ marginTop: "10px", width: "100%", padding: "10px", background: "#bf3e3e", color: "#fff", border: "none", borderRadius: "5px", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "5px" }}
+          style={{
+            marginTop: "10px",
+            width: "100%",
+            padding: "10px",
+            background: "#bf3e3e",
+            color: "#fff",
+            border: "none",
+            borderRadius: "5px",
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "5px"
+          }}
         >
           <CgDanger /> Clear All Codes <CgDanger />
         </button>
