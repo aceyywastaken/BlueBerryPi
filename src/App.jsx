@@ -36,6 +36,8 @@ const buttonConfigs = [
   { label: "Charge Current At High Limit", code: "04.00.80", description: "Fast Charge Current At High Limit" }
 ];
 
+// ...keep imports and buttonConfigs same
+
 export default function App() {
   const [log, setLog] = useState([]);
   const [expanded, setExpanded] = useState({});
@@ -77,57 +79,63 @@ export default function App() {
   };
 
   const getColor = (code) => {
-    if (code.startsWith("01")) return "#8B1A1A"; // dark red
-    if (code.startsWith("02")) return "#B85C1A"; // dark orange
-    if (code.startsWith("03")) return "#B8A41A"; // dark yellow
-    return "#444"; // default dark gray
+    if (code.startsWith("01")) return "rgba(200,50,50,0.85)";
+    if (code.startsWith("02")) return "rgba(220,120,50,0.85)";
+    if (code.startsWith("03")) return "rgba(220,200,50,0.85)";
+    return "rgba(100,100,100,0.85)";
   };
-  
 
   return (
     <div style={{ display: "flex", height: "100vh", background: "#2b2b2b", color: "#fff" }}>
-      <div style={{ flex: 1, padding: "20px", overflowY: "auto" }}>
+      <div style={{ flex: 1, padding: "25px", overflowY: "auto" }}>
         {buttonConfigs.map((btn, i) => (
           <div
             key={i}
             style={{
               display: "flex",
               alignItems: "center",
-              marginBottom: "10px",
-              padding: "10px",
-              background: getColor(btn.code), 
-              borderRadius: "8px",
-              transition: "background 0.2s",
-              color: "#fff"
+              gap: "15px",
+              padding: "18px 20px",
+              background: getColor(btn.code),
+              borderRadius: "12px",
+              boxShadow: "0 3px 8px rgba(0,0,0,0.4)",
+              transition: "all 0.2s ease-in-out",
+              color: "#fff",
+              marginBottom: "16px"
             }}
-            onMouseEnter={e => e.currentTarget.style.opacity = "0.9"}
-            onMouseLeave={e => e.currentTarget.style.opacity = "1"}
+            onMouseEnter={e => e.currentTarget.style.transform = "scale(1.02)"}
+            onMouseLeave={e => e.currentTarget.style.transform = "scale(1)"}
           >
+            {/* Trigger Button */}
             <button
               onClick={() => sendCommand(btn.code)}
               style={{
                 background: "#4CAF50",
                 color: "#fff",
                 border: "none",
-                borderRadius: "5px",
-                padding: "10px",
+                borderRadius: "10px",
+                padding: "12px 18px",
                 cursor: "pointer",
-                marginRight: "10px",
                 display: "flex",
-                alignItems: "center"
+                alignItems: "center",
+                boxShadow: "0 2px 4px rgba(0,0,0,0.3)",
+                transition: "all 0.2s ease-in-out"
               }}
             >
-              <MdStart style={{ marginRight: "5px" }} /> Trigger
+              <MdStart style={{ marginRight: "7px" }} /> Trigger
             </button>
 
+            {/* Label + Info Dropdown */}
             <div style={{ flex: 1 }}>
               <div
                 style={{
                   cursor: "pointer",
-                  fontSize: "16px",
+                  fontSize: "17px",
                   display: "flex",
                   alignItems: "center",
-                  justifyContent: "space-between"
+                  justifyContent: "space-between",
+                  fontFamily: "Segoe UI, sans-serif",
+                  minHeight: "45px",
                 }}
                 onClick={() => setExpanded(prev => ({ ...prev, [i]: !prev[i] }))}
               >
@@ -136,30 +144,34 @@ export default function App() {
               </div>
               <div
                 style={{
-                  maxHeight: expanded[i] ? "200px" : "0px",
+                  maxHeight: expanded[i] ? "500px" : "0px",
                   overflow: "hidden",
                   transition: "max-height 0.3s ease",
-                  fontSize: "15px",
-                  lineHeight: "1.3",
-                  marginTop: expanded[i] ? "5px" : "0px"
+                  fontSize: "16px",
+                  lineHeight: "1.5",
+                  marginTop: expanded[i] ? "8px" : "0px",
+                  color: "#ddd",
+                  padding: expanded[i]? "6px 0 0 0" : "0"
                 }}
               >
-                {btn.description} <span style={{ color: "#000" }}>({btn.code})</span>
+                {btn.description} <span style={{ color: "#ccc" }}>({btn.code})</span>
               </div>
             </div>
 
+            {/* Clear Button */}
             <button
               onClick={() => clearCommand(btn.code)}
               style={{
                 background: "#bf3e3e",
                 color: "#fff",
                 border: "none",
-                borderRadius: "5px",
-                padding: "5px 10px",
+                borderRadius: "10px",
+                padding: "10px 14px",
                 cursor: "pointer",
-                marginLeft: "10px",
                 display: "flex",
-                alignItems: "center"
+                alignItems: "center",
+                boxShadow: "0 2px 4px rgba(0,0,0,0.3)",
+                transition: "all 0.2s ease-in-out"
               }}
             >
               <RiDeleteBack2Line /> Clear
@@ -167,21 +179,24 @@ export default function App() {
           </div>
         ))}
 
+        {/* Clear All Codes Button */}
         <button
           onClick={clearAllCodes}
           style={{
-            marginTop: "10px",
+            marginTop: "18px",
             width: "100%",
-            padding: "10px",
+            padding: "14px",
             background: "#bf3e3e",
             color: "#fff",
             border: "none",
-            borderRadius: "5px",
+            borderRadius: "12px",
             cursor: "pointer",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            gap: "5px"
+            gap: "6px",
+            boxShadow: "0 3px 8px rgba(0,0,0,0.4)",
+            transition: "all 0.2s ease-in-out"
           }}
         >
           <CgDanger /> Clear All Codes <CgDanger />
@@ -197,9 +212,22 @@ function ActivityLog({ log, setLog }) {
   const [open, setOpen] = useState(true);
 
   return (
-    <div style={{ width: open ? "300px" : "30px", transition: "width 0.3s", background: "#333", overflowY: "auto" }}>
+    <div style={{
+      width: open ? "320px" : "35px",
+      transition: "width 0.3s",
+      background: "rgba(50,50,50,0.95)",
+      overflowY: "auto",
+      borderRadius: "12px",
+      padding: open ? "10px" : "0"
+    }}>
       <div
-        style={{ display: "flex", alignItems: "center", justifyContent: open ? "space-between" : "center", padding: "10px", cursor: "pointer" }}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: open ? "space-between" : "center",
+          padding: "10px",
+          cursor: "pointer"
+        }}
         onClick={() => setOpen(!open)}
       >
         {open && <h3 style={{ margin: 0 }}>Activity Log</h3>}
@@ -208,10 +236,21 @@ function ActivityLog({ log, setLog }) {
 
       {open && (
         <div style={{ padding: "0 10px 10px 10px" }}>
-          {log.length ? log.map((msg, i) => <div key={i}>{msg}</div>) : <div>No activity yet.</div>}
+          {log.length ? log.map((msg, i) => <div key={i} style={{ marginBottom: "6px" }}>{msg}</div>) : <div>No activity yet.</div>}
           <button
             onClick={() => setLog([])}
-            style={{ marginTop: "10px", width: "100%", padding: "10px", background: "#bf3e3e", color: "#fff", border: "none", borderRadius: "5px", cursor: "pointer" }}
+            style={{
+              marginTop: "12px",
+              width: "100%",
+              padding: "12px",
+              background: "#bf3e3e",
+              color: "#fff",
+              border: "none",
+              borderRadius: "10px",
+              cursor: "pointer",
+              boxShadow: "0 2px 4px rgba(0,0,0,0.3)",
+              transition: "all 0.2s ease-in-out"
+            }}
           >
             Clear log
           </button>
