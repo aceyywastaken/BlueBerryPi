@@ -37,7 +37,6 @@ const buttonConfigs = [
 ];
 
 
-
 export default function App() {
   const [log, setLog] = useState([]);
   const [expanded, setExpanded] = useState({});
@@ -50,6 +49,17 @@ export default function App() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ code }),
+
+
+
+
+
+
+
+
+
+
+
       });
       const data = await res.json();
       logMessage(res.ok ? `[SENT] ${data.cmd}` : `[ERROR] ${data.message}`);
@@ -107,7 +117,7 @@ export default function App() {
               color: "#fff",
               marginBottom: "16px"
             }}
-            onMouseEnter={e => e.currentTarget.style.transform = "scale(1.05)"}
+            onMouseEnter={e => e.currentTarget.style.transform = "scale(1.02)"}
             onMouseLeave={e => e.currentTarget.style.transform = "scale(1)"}
           >
             {/* Trigger Button */}
@@ -262,4 +272,6 @@ function ActivityLog({ log, setLog }) {
       )}
     </div>
   );
-          }
+
+
+}
