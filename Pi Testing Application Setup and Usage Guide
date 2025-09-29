@@ -70,14 +70,11 @@ python3 backend/Send_Info.py
 The backend handles SSH connections to the Pi automatically. 
 
 It listens on 0.0.0.0:5000 for requests from the frontend. 
-
  
-
- 
-
 This will be different for everyone so u need to convert  
 
  
+const BACKEND_URL = "YOUR.IP";
 
 To match your url  
 
