@@ -1,0 +1,148 @@
+BlueBerryPi – Application Setup & Usage Guide 
+
+Prerequisites 
+
+1. Raspberry Pi Connection 
+
+Ensure your computer is connected to the same network as the Raspberry Pi. 
+
+The Pi must be powered on and accessible over the network. 
+
+No separate backend setup is required on the Pi — all backend logic is included in this repository. 
+
+2. System Requirements 
+
+Node.js and npm installed on your computer. 
+
+Python 3 installed for SSH/command logic via the backend (included in the repo). 
+
+Install backend dependencies with: 
+
+pip install -r requirements.txt 
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+Repository Structure 
+
+The BlueBerryPi repository contains everything needed to run the system: 
+
+BlueBerryPi/ 
+├─ backend/            # Python backend using SSH to communicate with the Pi 
+│  ├─ Send_Info.py 
+│  └─ requirements.txt 
+├─ frontend/           # React frontend 
+│  ├─ package.json 
+│  ├─ src/ 
+│  │  ├─ App.jsx 
+│  │  ├─ index.jsx 
+│  │  └─ components/ 
+│  └─ public/ 
+│     └─ index.html 
+└─ README.md 
+ 
+
+No extra files or manual Pi backend setup is required. 
+
+ 
+
+Running the System 
+
+1. Clone the Repository 
+
+git clone https://github.com/aceyywastaken/BlueBerryPi.git 
+cd BlueBerryPi 
+ 
+
+2. Start the Backend 
+
+From the repository root or backend/ folder: 
+
+python3 backend/Send_Info.py 
+ 
+
+The backend handles SSH connections to the Pi automatically. 
+
+It listens on 0.0.0.0:5000 for requests from the frontend. 
+
+ 
+
+ 
+
+This will be different for everyone so u need to convert  
+
+ 
+
+To match your url  
+
+3. Start the Frontend 
+
+Open a new terminal, navigate to the frontend folder: 
+
+cd frontend 
+npm install      # Install dependencies 
+npm run dev      # Start the development server 
+ 
+
+The frontend communicates automatically with the backend. 
+
+No additional configuration is required — the backend URL is already set. 
+
+ 
+
+Application Features 
+
+Trigger Button – Sends the linked CAN code to the Raspberry Pi. 
+
+Clear Button – Clears the corresponding code on the Pi. 
+
+Description Dropdown – Shows detailed information about each code. 
+
+Clear All Button – Clears all active codes at once. 
+
+Activity Log – Displays sent/cleared codes and any errors if the Pi is unreachable. 
+
+ 
+
+Troubleshooting 
+
+Python Backend 
+
+Ensure the Pi is powered on and reachable via SSH. 
+
+Verify Python 3 is installed. 
+
+Run backend from within the repository; no extra files are needed: 
+
+pip install -r requirements.txt 
+ 
+
+React Frontend 
+
+Ensure all dependencies are installed (npm install) before running. 
+
+If the frontend cannot reach the backend, confirm that the backend is running and the Pi is accessible from your computer. 
+
+Code Not Sending/Clearing 
+
+Check the Activity Log for errors. 
+
+Confirm the Pi is online and network-accessible. 
+
+ 
+
+Notes 
+
+This repository isn't fully plug-and-play: clone, install, and run. 
+
+SSH credentials for the Pi are stored securely in backend/Send_Info.py; no manual SSH setup is required. 
+
+You need customize the Pi IP address in App.jsx
+
+ 
