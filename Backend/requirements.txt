@@ -1,5 +1,6 @@
 #backend dependencies for BlueBerryPi
 
-Flask==2.3.3
-Flask-Cors==3.1.2
-paramiko==3.3.0
+Flask==3.1.2
+flask-cors==6.0.1
+paramiko==4.0.0
+
